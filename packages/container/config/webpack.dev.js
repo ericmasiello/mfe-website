@@ -1,5 +1,6 @@
 const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const commonConfig = require('./webpack.common');
 
 const devConfig = {
@@ -11,6 +12,22 @@ const devConfig = {
     },
   },
   plugins: [
+    // this is the HOST app
+    new ModuleFederationPlugin({
+      name: 'container', //technically this isn't required for the host app
+      // desigate the different remote options
+      remotes: {
+        // keys are the different modules we wanto load in
+        // value is where it exists
+
+        // "marketing" before the "@" has to match up to the `name` "marketing" in the Marketing
+        // app's "ModuleFederationPlugin" config
+
+        // the "marketing" key is used locally within the container app such that if we ever import
+        // something named "marketing", it will resolve to "marketing@http://localhost:8081/remoteEntry.js"
+        marketing: 'marketing@http://localhost:8081/remoteEntry.js',
+      },
+    }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
