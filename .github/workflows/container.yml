@@ -24,6 +24,8 @@ jobs:
 
       # gives us access to AWS CLI
       - uses: chrislennon/action-aws-cli@v1.1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       # syncs contents of `dist` directory to an s3 bucket
       - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
         env:
