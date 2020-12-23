@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - master
+
+    # only runs the action if a file changes in packages/container/*
+    # or we modify the this workflow file
     paths:
       - 'packages/container/**'
+      - '.github/workflows/container.yml'
 
 # sets execution env for within the package/container (e.g. npm install)
 defaults:
@@ -28,6 +32,13 @@ jobs:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
       # syncs contents of `dist` directory to an s3 bucket
       - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # creates an "invalidation" for our index.html. This is necessary to sidestep
+      # cloudfront permanently caching "index.html" since its file name doesn't change
+      - run: aws cloundfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/container/latest/index.html"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
