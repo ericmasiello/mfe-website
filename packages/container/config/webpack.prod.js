@@ -10,6 +10,7 @@ const prodConfig = {
   mode: 'production', // minifies/uglifies code
   output: {
     filename: '[name].[contenthash].js', // cache busting file name
+    publicPath: '/container/latest/', // this maps to the s3 folder structure we apply
   },
   plugins: [
     new ModuleFederationPlugin({
