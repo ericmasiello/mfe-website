@@ -27,6 +27,8 @@ const devConfig = {
         // something named "marketing", it will resolve to "marketing@http://localhost:8081/remoteEntry.js"
         marketing: 'marketing@http://localhost:8081/remoteEntry.js',
       },
+      // designates which libraries should be shared between this package and other federated modules
+      shared: ['react', 'react-dom'],
     }),
     new HtmlWebpackPlugin({
       template: './public/index.html',
