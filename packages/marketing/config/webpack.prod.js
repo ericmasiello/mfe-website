@@ -7,6 +7,8 @@ const prodConfig = {
   mode: 'production',
   output: {
     filename: '[name].[contenthash].js',
+    // points to the correct path on s3/cloudfront
+    publicPath: '/marketing/latest/',
   },
   plugins: [
     new ModuleFederationPlugin({
