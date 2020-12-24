@@ -7,22 +7,22 @@ const packageJson = require('../package.json');
 const devConfig = {
   mode: 'development',
   output: {
-    publicPath: 'http://localhost:8081/',
+    publicPath: 'http://localhost:8082/',
   },
   devServer: {
-    port: 8081,
+    port: 8082,
     historyApiFallback: {
       index: 'index.html',
     },
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: 'marketing', // declares a global variable inside our script
+      name: 'auth', // declares a global variable inside our script
       filename: 'remoteEntry.js',
       // file we want to make public to the outside world
       exposes: {
-        // Whenever someone asks for "*/MarketingApp", we'll provide the src/bootstrap file
-        './MarketingApp': './src/bootstrap',
+        // Whenever someone asks for "*/AuthApp", we'll provide the src/bootstrap file
+        './AuthApp': './src/bootstrap',
       },
       // designates which libraries should be shared between this package and other federated modules
       shared: packageJson.dependencies,
