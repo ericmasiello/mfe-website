@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-// "'marketing'" has to match the key found in container's ModuleFederationPlugin remotes
-// "/MarketingApp" has to match whatever is exposed via the marketing apps ModuleFederationPlugin "exposes" key
-import { mount } from 'marketing/MarketingApp';
+// "'auth'" has to match the key found in container's ModuleFederationPlugin remotes
+// "/AuthApp" has to match whatever is exposed via the marketing apps ModuleFederationPlugin "exposes" key
+import { mount } from 'auth/AuthApp';
 
 export default () => {
   const ref = useRef(null);
