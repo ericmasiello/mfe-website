@@ -1,0 +1,44 @@
+name: deploy-auth
+
+on:
+  push:
+    branches:
+      - master
+
+    # only runs the action if a file changes in packages/auth/*
+    # or we modify the this workflow file
+    paths:
+      - 'packages/auth/**'
+      - '.github/workflows/auth.yml'
+
+# sets execution env for within the package/auth (e.g. npm install)
+defaults:
+  run:
+    working-directory: packages/auth
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # checks out the code, then install and build to `dist`
+      - uses: actions/checkout@v2
+      - run: npm install
+      - run: npm run build
+
+      # gives us access to AWS CLI
+      - uses: chrislennon/action-aws-cli@v1.1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      # syncs contents of `dist` directory to an s3 bucket
+      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/auth/latest
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # creates an "invalidation" for our index.html. This is necessary to sidestep
+      # cloudfront permanently caching "index.html" since its file name doesn't change
+      - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/auth/latest/remoteEntry.js"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
