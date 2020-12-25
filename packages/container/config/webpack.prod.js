@@ -17,6 +17,7 @@ const prodConfig = {
       name: 'container', // technically optional for the host module
       remotes: {
         marketing: `marketing@${domain}/marketing/latest/remoteEntry.js`,
+        auth: `auth@${domain}/auth/latest/remoteEntry.js`,
       },
       shared: packageJson.dependencies,
     }),

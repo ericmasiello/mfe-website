@@ -29,6 +29,7 @@ const devConfig = {
         // the "marketing" key is used locally within the container app such that if we ever import
         // something named "marketing", it will resolve to "marketing@http://localhost:8081/remoteEntry.js"
         marketing: 'marketing@http://localhost:8081/remoteEntry.js',
+        auth: 'auth@http://localhost:8082/remoteEntry.js',
       },
       // designates which libraries should be shared between this package and other federated modules
       shared: packageJson.dependencies,
