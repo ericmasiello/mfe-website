@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 // "/AuthApp" has to match whatever is exposed via the marketing apps ModuleFederationPlugin "exposes" key
 import { mount } from 'auth/AuthApp';
 
-export default () => {
+export default ({ onSignIn }) => {
   const ref = useRef(null);
   const history = useHistory();
 
@@ -19,6 +19,7 @@ export default () => {
           history.push(nextPathname);
         }
       },
+      onSignIn,
     });
 
     history.listen(onParentNavigate);
